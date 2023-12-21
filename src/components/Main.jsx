@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
 
 async function fetchMatches() {
-  const apiToken = '98a87a7b443e41d79117e96b67fd872b'; // ここにFootball Dataから取得したAPIキーを入力
-  const response = await fetch("https://api.football-data.org/v4/matches", {
+  const apiToken = '98a87a7b443e41d79117e96b67fd872b';
+  // CORSプロキシを使用する場合、以下のようにURLを書き換えます
+  const proxyUrl = 'https://corsproxy.io/?';
+  const targetUrl = "https://api.football-data.org/v4/matches";
+  
+  const response = await fetch(proxyUrl + encodeURIComponent(targetUrl), {
     headers: {
       "X-Auth-Token": apiToken
     }
   });
   const data = await response.json();
-  return data.matches; // 試合情報が'matches'プロパティにあると仮定
+  return data.matches;
 }
 
 export default function Main() {

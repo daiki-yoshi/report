@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 
 async function fetchMatches() {
   const apiToken = '98a87a7b443e41d79117e96b67fd872b';
-  // CORSプロキシを使用する場合、以下のようにURLを書き換えます
   const proxyUrl = 'https://corsproxy.io/?';
-  const targetUrl = "https://api.football-data.org/v4/matches";
+  const targetUrl = 'http://api.football-data.org/v4/competitions/2021/matches?matchday=1';
   
   const response = await fetch(proxyUrl + encodeURIComponent(targetUrl), {
     headers: {
@@ -23,16 +22,38 @@ export default function Main() {
       const data = await fetchMatches();
       setMatches(data)
     })();
-  }, []); // コンポーネントがマウントされた際に試合データを取得
+  }, []); 
 
   return (
     <main>
-      {matches.map((match, index) => (
-        <div key={index}>
-          {/* 試合データの表示。必要に応じて詳細を追加 */}
-          <p>{match.homeTeam.name} vs {match.awayTeam.name}</p>
-        </div>
-      ))}
+      <h1 class="schedule">Match Schedule</h1>
+      <table border={3} align="center">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Home Team</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>Away Team</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {matches.map((match, index) => (
+            <tr key={index}>
+              {/* 試合データの表示。必要に応じて詳細を追加 */}
+              <td><img src={match.homeTeam.crest} alt="" width="100"/></td>
+              <td>{match.homeTeam.name}</td>
+              <td>{match.score.fullTime.home}</td>
+              <td>vs</td> 
+              <td>{match.score.fullTime.away}</td>
+              <td>{match.awayTeam.name}</td>
+              <td><img src={match.awayTeam.crest} alt="" width="100"/></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </main>
   );
 }
